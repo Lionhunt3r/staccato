@@ -53,7 +53,16 @@ class AuthProvider extends ChangeNotifier {
       final response = await SupabaseService.signInWithEmail(email, password);
       
       if (response.user != null) {
-        await _loadUserProfile(response.user!.id);
+        // For now, create a simple UserProfile without database lookup
+        _currentUser = UserProfile(
+          id: response.user!.id,
+          email: response.user!.email,
+          firstName: 'Demo', // Placeholder
+          lastName: 'User',  // Placeholder
+          active: true,
+          createdAt: DateTime.now(),
+        );
+        
         _setLoading(false);
         return true;
       }
